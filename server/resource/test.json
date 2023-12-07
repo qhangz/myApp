@@ -1,0 +1,23 @@
+
+{
+    "code": 200,
+    "msg": "操作成功",
+    "data": {
+        "name": "Hello Kity",
+        "photoUrls": [
+            "http://dummyimage.com/400x400"
+        ],
+        "id": 3,
+        "category": {
+            "id": 71,
+            "name": "Cat"
+        },
+        "tags": [
+            {
+                "id": 22,
+                "name": "Cat"
+            }
+        ],
+        "status": "sold"
+    }
+}

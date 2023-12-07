@@ -1,0 +1,154 @@
+// 重置样式
+* {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    color: #333;
+    background: #f5f5f5;
+    // min-width: 1240px;
+    font: 1em/1.4 'Microsoft Yahei', 'PingFang SC', 'Avenir', 'Segoe UI',
+        'Hiragino Sans GB', 'STHeiti', 'Microsoft Sans Serif', 'WenQuanYi Micro Hei',
+        sans-serif;
+}
+
+#app {
+    background: var(--bg2);
+    user-select: none;
+    margin: 0 auto;
+    font-weight: normal;
+}
+
+/* 暗色主题 */
+html[data-theme="dark"] {
+    --text-color1: #fff;
+    --text-color2: #333;
+    --bg1: #102128;
+    --bg2: #2d5567;
+}
+
+/* 默认亮色主题 */
+:root {
+    --text-color1: #333;
+    --text-color2: #fff;
+    --text-color3: #909090;
+    --bg1: #fff;
+    --bg2: #f5f5f5;
+    --bg3: #f9f9f9;
+    --bg4: #f1f1f1;
+    --bg5: #EBF2FF;
+    --primary-100: #3c80ff;
+    --primary-200: #559EFF;
+    --primary-300: #8fc6fd;
+    --primary-400: #c3dffa;
+    --primary-500: #d7ebfd;
+
+}
+
+body,
+ul,
+h1,
+h3,
+h4,
+p,
+dl,
+dd {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+    outline: none;
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+textarea {
+    border: none;
+    outline: none;
+}
+
+button {
+    border: none;
+    outline: none;
+}
+
+i {
+    font-style: normal;
+}
+
+
+input[type='text'],
+input[type='search'],
+input[type='password'],
+input[type='checkbox'] {
+    padding: 0;
+    outline: none;
+    border: none;
+    -webkit-appearance: none;
+
+    &::placeholder {
+        color: #ccc;
+    }
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+    // background: #ebebeb url('@/assets/images/200.png') no-repeat center / contain;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+// .container {
+//     width: 1240px;
+//     margin: 0 auto;
+//     position: relative;
+// }
+
+// .ellipsis {
+//     white-space: nowrap;
+//     text-overflow: ellipsis;
+//     overflow: hidden;
+// }
+
+// .ellipsis-2 {
+//     word-break: break-all;
+//     text-overflow: ellipsis;
+//     display: -webkit-box;
+//     -webkit-box-orient: vertical;
+//     -webkit-line-clamp: 2;
+//     overflow: hidden;
+// }
+
+// .fl {
+//     float: left;
+// }
+
+// .fr {
+//     float: right;
+// }
+
+// .clearfix:after {
+//     content: '.';
+//     display: block;
+//     visibility: hidden;
+//     height: 0;
+//     line-height: 0;
+//     clear: both;
+// }
+
+// reset element
+.el-breadcrumb__inner.is-link {
+    font-weight: 400 !important;
+}
