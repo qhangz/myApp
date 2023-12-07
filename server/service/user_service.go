@@ -69,7 +69,7 @@ func Register(newUser model.User) error {
 
 	// 初始化summary和avatar_image
 	newUser.Summary = "This is a new use"
-	newUser.Avatar_image = "https://s2.loli.net/2023/12/05/hRQyPjI723LbV9l.png"
+	newUser.Avatar_image = "https://s2.loli.net/2023/12/07/ObzivQC2fqpTZlx.jpg"
 
 	return dao.Register(newUser)
 }

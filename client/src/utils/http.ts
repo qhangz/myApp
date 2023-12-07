@@ -13,18 +13,26 @@ httpInstance.interceptors.request.use(
         if (config.method === 'post') {
             config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         }
-
+        // 在请求发送前做一些处理，如添加token等
         return config
     },
     error => {
-        Promise.reject(error)
+        // 请求错误时的处理逻辑
+        return Promise.reject(error)
     }
 )
 
 // axios响应式拦截器
-httpInstance.interceptors.response.use(res => res.data, e => {
-    return Promise.reject(e)
-})
+httpInstance.interceptors.response.use(
+    response => {
+        // 对相应数据做一些处理，例如根据状态码进行错误处理等
+        return response.data
+    },
+    error => {
+        // 对相应错误做一些处理
+        return Promise.reject(error)
+    }
+)
 
 
 export default httpInstance

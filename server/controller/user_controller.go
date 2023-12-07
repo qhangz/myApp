@@ -13,7 +13,10 @@ func GetUserByUsername(c *gin.Context) {
 	username := c.Param("username")
 	user, err := service.GetUserByUsername(username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code": "400",
+			"error": err.Error(),
+		})
 		return
 	}
 	c.JSON(http.StatusOK, user)
@@ -40,10 +43,16 @@ func Register(c *gin.Context) {
 	// c.Bind(&newUser)
 	err := service.Register(newUser)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+		c.JSON(http.StatusOK, gin.H{
+			"code": "400",
+			"error": err.Error(),
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "register success"})
+	c.JSON(http.StatusOK, gin.H{
+		"code": "200",
+		"msg":  "register success",
+	})
 }
 
 // @Title			user login
@@ -64,11 +73,17 @@ func Login(c *gin.Context) {
 	// c.Bind(&user)
 	userInfo, token, err := service.Login(user)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+		c.JSON(http.StatusOK, gin.H{
+			"code": "400",
+			"error": err.Error(),
+		})
 		return
 	}
 	if token == "" {
-		c.JSON(http.StatusOK, gin.H{"error": "token is empty"})
+		c.JSON(http.StatusOK, gin.H{
+			"code": "500",
+			"error": "token is empty",
+		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{

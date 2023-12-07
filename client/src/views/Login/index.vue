@@ -2,8 +2,10 @@
 import { reactive } from 'vue'
 import { userRegister } from '@/api/user'
 import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
+// import { ElMessage } from 'element-plus'
 
-import axios from 'axios';
+// form state
 const state = reactive({
     isLogin: true,
     emailError: false,
@@ -11,33 +13,64 @@ const state = reactive({
     existed: false,
 
 })
+// form data
 const form = reactive({
     username: '',
     password: '',
     email: ''
 })
 
+// route back function 
+const router = useRouter();
+const routeBack = () => {
+    router.back()
+}
+
+
 // login function
+const loginWaring = () => {
+    ElMessage({
+        message: '请完成信息输入',
+        type: 'warning',
+    })
+}
 const login = () => {
     console.log('login:');
-
-    useUserStore().login({ username: form.username, password: form.password })
-    console.log("userinfo:", useUserStore().userInfo);
-
+    if (form.username != '' && form.password != '') {
+        useUserStore().login({ username: form.username, password: form.password })
+        // console.log("userinfo:", useUserStore().userInfo);
+        if (useUserStore().userState.isLogin == true) {
+            routeBack()
+        }
+    } else {
+        if (form.username == '') {
+            loginWaring()
+        }
+        if (form.password == '') {
+            loginWaring()
+        }
+    }
 }
 
 // register function
+const registerSuccess = () => {
+    ElMessage({
+        message: '注册成功',
+        type: 'success',
+    })
+}
+const registerFail = () => {
+    ElMessage.error('注册失败')
+}
 const register = () => {
     const res = userRegister(form.username, form.password, form.email).then(res => {
         console.log("res of register:", res);
-        // if (res.code == 200) {
-        //     console.log("register successfully");
-        //     // showToast("注册成功")
-        //     // router.push("/user/login")
-        // } else {
-        //     console.log("register failed");
-        //     // showToast("注册失败")
-        // }
+        if (res.code == 200) {
+            registerSuccess()
+            changeType()
+        } else {
+            registerFail()
+        }
     })
 
 }
@@ -63,7 +96,7 @@ const changeType = () => {
                         <span class="errTips" v-if="state.emailError">* 邮箱填写错误 *</span>
                         <input type="password" placeholder="密码" v-model="form.password">
                         <span class="errTips" v-if="state.passwordError">* 密码填写错误 *</span>
-                        <div class="otherWay">其他登录： Github</div>
+                        <div class="otherWay">其他登录： Github账号登录</div>
                     </div>
                     <button class="bbutton" @click="login">登录</button>
                 </div>
