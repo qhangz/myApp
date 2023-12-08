@@ -2,8 +2,6 @@
 import { reactive } from 'vue'
 import { userRegister } from '@/api/user'
 import { useUserStore } from '@/stores/userStore';
-import { useRouter } from 'vue-router';
-// import { ElMessage } from 'element-plus'
 
 // form state
 const state = reactive({
@@ -11,7 +9,7 @@ const state = reactive({
     emailError: false,
     passwordError: false,
     existed: false,
-
+    passwordTooShort: false,
 })
 // form data
 const form = reactive({
@@ -19,13 +17,6 @@ const form = reactive({
     password: '',
     email: ''
 })
-
-// route back function 
-const router = useRouter();
-const routeBack = () => {
-    router.back()
-}
-
 
 // login function
 const loginWaring = () => {
@@ -35,20 +26,10 @@ const loginWaring = () => {
     })
 }
 const login = () => {
-    console.log('login:');
     if (form.username != '' && form.password != '') {
         useUserStore().login({ username: form.username, password: form.password })
-        // console.log("userinfo:", useUserStore().userInfo);
-        if (useUserStore().userState.isLogin == true) {
-            routeBack()
-        }
     } else {
-        if (form.username == '') {
-            loginWaring()
-        }
-        if (form.password == '') {
-            loginWaring()
-        }
+        loginWaring()
     }
 }
 
@@ -62,19 +43,34 @@ const registerSuccess = () => {
 const registerFail = () => {
     ElMessage.error('注册失败')
 }
-const register = () => {
-    const res = userRegister(form.username, form.password, form.email).then(res => {
-        console.log("res of register:", res);
-        if (res.code == 200) {
-            registerSuccess()
-            changeType()
-        } else {
-            registerFail()
-        }
+const registerWaring = () => {
+    ElMessage({
+        message: '请完成信息输入',
+        type: 'warning',
     })
-
 }
-
+const register = () => {
+    if (form.username != '' && form.email != '' && form.password != '') {
+        if (form.password.length < 6) {
+            state.passwordTooShort = true
+            return
+        } else {
+            state.passwordTooShort = false
+            const res = userRegister(form.username, form.password, form.email).then(res => {
+                console.log("res of register:", res);
+                if (res.code == 200) {
+                    registerSuccess()
+                    changeType()
+                } else {
+                    registerFail()
+                }
+            })
+        }
+    } else {
+        registerWaring()
+    }
+}
+state.passwordTooShort = false
 
 // changeType function
 const changeType = () => {
@@ -89,6 +85,7 @@ const changeType = () => {
     <div class="login">
         <div class="contain">
             <div class="big-box" :class="{ active: state.isLogin }">
+                <!-- 账户登录 -->
                 <div class="big-contain" v-if="state.isLogin">
                     <div class="btitle">账户登录</div>
                     <div class="bform">
@@ -100,6 +97,13 @@ const changeType = () => {
                     </div>
                     <button class="bbutton" @click="login">登录</button>
                 </div>
+                <div class="instruction" v-if="state.isLogin">
+                    <span>注册登录即表示同意</span>
+                    <RouterLink to="/about">&nbsp;用户协议&nbsp;</RouterLink>
+                    <span>和</span>
+                    <RouterLink to="/about">&nbsp;隐私政策&nbsp;</RouterLink>
+                </div>
+                <!-- 注册 -->
                 <div class="big-contain" key="bigContainRegister" v-else>
                     <div class="btitle">创建账户</div>
                     <div class="bform">
@@ -107,23 +111,20 @@ const changeType = () => {
                         <span class="errTips" v-if="state.existed">* 用户名已经存在！ *</span>
                         <input type="text" placeholder="邮箱" v-model="form.email">
                         <input type="password" placeholder="密码" v-model="form.password">
+                        <span class="errTips" v-if="state.passwordTooShort">* 密码需要大于六位！ *</span>
                     </div>
                     <button class="bbutton" @click="register">注册</button>
-                </div>
-                <div class="instruction" v-if="state.isLogin">
-                    <span>注册登录即表示同意</span>
-                    <RouterLink to="/about">&nbsp;用户协议&nbsp;</RouterLink>
-                    <span>和</span>
-                    <RouterLink to="/about">&nbsp;隐私政策&nbsp;</RouterLink>
                 </div>
             </div>
 
             <div class="small-box" :class="{ active: state.isLogin }">
+                <!-- 登录跳转注册 -->
                 <div class="small-contain" key="smallContainRegister" v-if="state.isLogin">
                     <div class="stitle">Hello World!</div>
                     <p class="scontent">和我们一起旅行</p>
                     <button class="sbutton" @click="changeType">注册</button>
                 </div>
+                <!-- 注册跳转登录 -->
                 <div class="small-contain" key="smallContainLogin" v-else>
                     <div class="stitle">Welcome!</div>
                     <p class="scontent">进入奇妙世界吧</p>

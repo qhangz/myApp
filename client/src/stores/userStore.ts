@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { userLogin } from '@/api/user'
 import { createPinia } from 'pinia'
-
+import { useRouter } from 'vue-router'
 const loginSuccessMsg = () => {
     ElMessage({
         message: '登录成功',
@@ -23,10 +23,18 @@ const logoutSuccessMsg = () => {
     })
 }
 
+const alreadyLoginMsg = () => {
+    ElMessage({
+        message: '已经登录',
+        type: 'warning',
+    })
+}
+
 const errorMsg = () => {
     ElMessage.error('Oops. 出错了')
 }
 export const useUserStore = defineStore('user', () => {
+    const router = useRouter()
     // 管理用户登录状态的state
     const userState = {
         isLogin: false,  //是否登录
@@ -40,22 +48,24 @@ export const useUserStore = defineStore('user', () => {
     const login = async ({ username, password }: { username: string, password: any }) => {
         if (userState.isLogin === true) {
             // already login
-            console.log("already login");
+            alreadyLoginMsg()   //提示已经登录
         } else {
             const res = await userLogin(username, password)
-            console.log(res);
             if (res.code == 200) {
-                loginSuccessMsg()
+                loginSuccessMsg()   //提示登录成功
                 userState.token = res.data.token
+                userState.isLogin = true
                 userInfo.value = res.data.userInfo
                 // localstorage存储登录状态
                 localStorage.setItem('isLogin', 'true')
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                // 登录成功后，跳转到上一个页面
+                router.back()
             } else if (res.code == 400) {
-                loginWarningMsg()
+                loginWarningMsg()   //提示登录有误
             } else {
-                errorMsg()
+                errorMsg()  //提示登录有误
             }
         }
     }
@@ -63,7 +73,7 @@ export const useUserStore = defineStore('user', () => {
 
     // 登出
     const logout = () => {
-        logoutSuccessMsg()
+        logoutSuccessMsg()  //提示退出登录
         userState.isLogin = false
         userState.token = ''
         userInfo.value = {}

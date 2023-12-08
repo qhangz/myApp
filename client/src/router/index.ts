@@ -16,7 +16,9 @@ const router = createRouter({
           path: '/',
           name: 'home',
           component: () => import('../views/Home/index.vue'),
-
+          meta: { 
+            title: '主页' 
+          },
         },
         {
           // user page
@@ -24,7 +26,8 @@ const router = createRouter({
           name: 'user',
           component: () => import('../views/User/index.vue'),
           meta: {
-            isAuth: true
+            isAuth: true,
+            title: '用户页', 
           }
         }
       ]
@@ -34,7 +37,10 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/Login/index.vue')
+      component: () => import('../views/Login/index.vue'),
+      meta: { 
+        title: '登录' 
+      },
     },
 
     // about page
@@ -45,6 +51,9 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/About/AboutView.vue'),
+      meta: { 
+        title: '关于' 
+      },
     }
   ]
 })
@@ -73,12 +82,16 @@ const loginMsg = () => {
 
 // 通过localStorage获取登录状态
 router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title as string ? to.meta.title : '加载中';
+  }
+  next();
   if (to.meta.isAuth) { // 判断该路由是否需要登录权限
     if (localStorage.isLogin === 'true') {
       next();
     } else {
-      next('/login')
-      loginMsg()
+      next('/login');
+      loginMsg();
     }
   } else {
     next();

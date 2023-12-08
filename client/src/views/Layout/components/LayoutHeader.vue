@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive } from 'vue'
 import { Search } from '@element-plus/icons-vue'    // 引入搜索图标
 import { useUserStore } from '@/stores/userStore';
 
@@ -9,6 +9,9 @@ const { y } = useScroll(window)
 // user info interface
 useUserStore().isUserLogin()
 const isLogin = ref(useUserStore().userState.isLogin)
+
+// user avatar image
+const avatarImage = reactive(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!).avatar_image : '')
 
 // 自动补全输入框
 interface RestaurantItem {
@@ -85,7 +88,7 @@ onMounted(() => {
                     </div>
                     <div class="avatar">
                         <RouterLink to="/user">
-                            <div class="icon"></div>
+                            <img class="icon" :src="avatarImage" />
                         </RouterLink>
                     </div>
                 </div>
@@ -204,7 +207,7 @@ onMounted(() => {
                     .icon {
                         width: 100%;
                         height: 100%;
-                        background: url('@/assets/images/myavatar.jpg') no-repeat center 0px / contain;
+                        // background: url('@/assets/images/myavatar.jpg') no-repeat center 0px / contain;
                         border-radius: 50%;
                     }
                 }
