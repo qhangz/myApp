@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import BackTop from '@/components/BackTop.vue'
+import UserList from './components/UserList.vue'
 </script>
 
 <template>
     <div class="home">
-        this is home page
-        
+        <UserList />
         <BackTop />
     </div>
 </template>
 
 <style lang="scss" scoped>
 .home {
-    width: 100%;
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     align-items: center;
-    flex-direction: row;
-    padding-top: 20px;
-    gap: 20px;
-
+    flex-direction: column;
+    min-height: calc(100vh - 188px);
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px;
 }
 </style>

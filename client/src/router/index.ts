@@ -16,8 +16,8 @@ const router = createRouter({
           path: '/',
           name: 'home',
           component: () => import('../views/Home/index.vue'),
-          meta: { 
-            title: '主页' 
+          meta: {
+            title: '用户列表'
           },
         },
         {
@@ -27,7 +27,26 @@ const router = createRouter({
           component: () => import('../views/User/index.vue'),
           meta: {
             isAuth: true,
-            title: '用户页', 
+            title: '用户页',
+          }
+        },
+        {
+          // user page
+          path: '/userdelete',
+          name: 'userdelete',
+          component: () => import('../views/UserDelete/index.vue'),
+          meta: {
+            title: '用户删除',
+          }
+        },
+        {
+          // user page
+          path: '/userupdate',
+          name: 'userupdate',
+          component: () => import('../views/UserUpdate/index.vue'),
+          meta: {
+            isAuth: true,
+            title: '用户更新',
           }
         }
       ]
@@ -38,8 +57,8 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/Login/index.vue'),
-      meta: { 
-        title: '登录' 
+      meta: {
+        title: '登录'
       },
     },
 
@@ -51,8 +70,8 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/About/AboutView.vue'),
-      meta: { 
-        title: '关于' 
+      meta: {
+        title: '关于'
       },
     }
   ]

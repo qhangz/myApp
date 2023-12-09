@@ -12,7 +12,8 @@ const isLogin = ref(useUserStore().userState.isLogin)
 
 // user avatar image
 const avatarImage = reactive(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!).avatar_image : '')
-
+// console.log("avatarImage", avatarImage);
+// console.log("locals", localStorage.getItem('userInfo'));
 // 自动补全输入框
 interface RestaurantItem {
     value: string
@@ -38,7 +39,7 @@ const createFilter = (queryString: string) => {
 }
 const loadAll = () => {
     return [
-        { value: 'github', link: 'https://github.com/qhangz' },
+        { value: 'qhangz', link: 'https://github.com/qhangz' },
         { value: 'HANG', link: 'https://github.com/qhangz' },
         { value: 'user', link: 'https://github.com/qhangz' },
     ]
@@ -60,7 +61,13 @@ onMounted(() => {
             <!-- header nav -->
             <ul class="app-header-nav">
                 <li class="home">
-                    <RouterLink to="/" :class="{ 'active': $route.path === '/' }">首页</RouterLink>
+                    <RouterLink to="/" :class="{ 'active': $route.path === '/' }">用户列表</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/userdelete" :class="{ 'active': $route.path === '/userdelete' }">用户删除</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/userupdate" :class="{ 'active': $route.path === '/userupdate' }">信息更新</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/about" :class="{ 'active': $route.path === '/about' }">关于</RouterLink>
@@ -147,7 +154,7 @@ onMounted(() => {
 
             li {
                 margin-right: 30px;
-                width: 38px;
+                width: 70px;
                 text-align: center;
 
                 a {

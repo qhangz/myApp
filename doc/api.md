@@ -19,6 +19,7 @@ register failed
     "code": "400",
     "error": "error message"
 }
+
 // login
 login success
 {
@@ -36,6 +37,30 @@ login success
     "msg": "登录成功"
 }
 login failed
+{
+    "code": "400",
+    "error": "error message"
+}
+
+// user list
+success
+{
+    "code": "200",
+	"data": "userList",
+}
+failed
+{
+    "code": "400",
+    "error": "error message"
+}
+
+// get user info by username
+success
+{
+    "code": "200",
+	"data": "userInfo",
+}
+failed
 {
     "code": "400",
     "error": "error message"

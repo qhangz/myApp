@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore';
+import { getUserList } from '@/api/user';
 import { onMounted, ref } from 'vue';
-import { getUserByUsername } from '@/api/user'
+// interface User {
+//                   avatar_image: string;
+//                   // Add other properties here if needed
+//                 }
 
-const login = () => {
-    console.log("login");
-    useUserStore().login({ username: 'HANG', password: '123456' })
-}
-const logout = () => {
-    useUserStore().logout()
-    console.log("logout");
-}
+//                 let userList = ref<User[]>([])
+//                 const getUserInfo = async () => {
+//                     const res = await getUserList()
+//                     userList.value = res.data
+//                     console.log(userList.value);
+//                 }
+//                 onMounted(() => {
+//                     getUserInfo()
+//                 })
 
-interface MyUser {
+interface User {
     ID: Int16Array;
     createTime: Date;
     updateTime: Date;
@@ -24,52 +28,69 @@ interface MyUser {
     summary: string;
     avatar_iamge: string;
 }
-let userInfo = ref<MyUser[]>([])
-
+let userList = ref<User[]>([])
 const getUserInfo = async () => {
-    let myUserName = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!).username : ''
-    const res = await getUserByUsername(myUserName)
-    userInfo.value = res.data
+    const res = await getUserList()
+    userList.value = res.data
+    // console.log(userList.value);
 }
 onMounted(() => {
     getUserInfo()
 })
+
+// let userList = ref([])
+// const getUserInfo = async () => {
+//     const res = await getUserList()
+//     userList.value = res.data
+//     console.log(userList.value);
+// }
+// onMounted(() => {
+//     getUserInfo()
+// })
 </script>
 
 <template>
-    <div class="user">
-        <div class="this-user">
+    <div class="user-list">
+        <div class="title">
+            This is user list
+        </div>
+        <div class="user-item" v-for="(item, index) in userList" :key="index">
             <div class="inner">
                 <div class="top">
-                    <img class="avatar-image" :src="userInfo.avatar_image" alt="avatar image">
-                    <div class="uid">UID&nbsp;:&nbsp;{{ userInfo.ID }}</div>
+                    <img class="avatar-image" :src="item.avatar_image" />
+                    <div class="uid">UID&nbsp;:&nbsp;{{ item.ID }}</div>
                 </div>
-                <div class="bottom">
-                    <div class="username">用户名&nbsp;:&nbsp;{{ userInfo.username }}</div>
-                    <div class="email">邮箱&nbsp;:&nbsp;{{ userInfo.email }}</div>
-                    <div class="age">年龄&nbsp;:&nbsp;{{ userInfo.age }}</div>
-                    <div class="summary">简介&nbsp;:&nbsp;{{ userInfo.summary }}</div>
-                </div>
+                <div class="username">username&nbsp;:&nbsp;{{ item.username }}</div>
+                <div class="email">email&nbsp;:&nbsp;{{ item.email }}</div>
+                <div class="age">age&nbsp;:&nbsp;{{ item.age }}</div>
+                <div class="summary">summary&nbsp;:&nbsp;{{ item.summary }}</div>
             </div>
         </div>
-        <div class="login" @click="login()">
-            登录
-        </div>
-        <div class="logout" @click="logout()">
-            登出
-        </div>
+
+
     </div>
 </template>
-
-<style lang="scss" scoped>
-.user {
+<style scoped lang="scss">
+.user-list {
     width: 100%;
+    height: 100%;
+    margin-top: 25px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin-left: -7px;
+    margin-right: -7px;
 
-    .this-user {
+    .title {
+        font-size: 20px;
+        color: var(--text-color1);
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        // background-color:red;
+    }
+
+    .user-item {
         height: 230px;
         cursor: pointer;
         width: 25%;
@@ -79,7 +100,6 @@ onMounted(() => {
         position: relative;
         margin-bottom: 30px;
         color: var(--text-color1);
-        margin-top: 50px;
 
         .inner {
             background-color: var(--bg1);
@@ -173,34 +193,6 @@ onMounted(() => {
                 box-shadow: 1px 5px 8px rgb(0 0 0 / 20%);
             }
         }
-    }
-
-    .login {
-        width: 100px;
-        height: 50px;
-        background-color: var(--primary-100);
-        color: var(--text-color2);
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-
-    .logout {
-        width: 100px;
-        height: 50px;
-        background-color: var(--primary-100);
-        color: var(--text-color2);
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        margin-top: 10px;
     }
 }
 </style>

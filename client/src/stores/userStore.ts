@@ -25,7 +25,7 @@ const logoutSuccessMsg = () => {
 
 const alreadyLoginMsg = () => {
     ElMessage({
-        message: '已经登录',
+        message: '用户已经登录',
         type: 'warning',
     })
 }
@@ -42,7 +42,7 @@ export const useUserStore = defineStore('user', () => {
         token: '',       //用户token
     }
     // 管理用户数据的state
-    const userInfo = ref({})
+    let userInfo = ref({})
 
     // 登录
     const login = async ({ username, password }: { username: string, password: any }) => {
@@ -56,10 +56,11 @@ export const useUserStore = defineStore('user', () => {
                 userState.token = res.data.token
                 userState.isLogin = true
                 userInfo.value = res.data.userInfo
+                // console.log("1", userInfo.value);
                 // localstorage存储登录状态
                 localStorage.setItem('isLogin', 'true')
                 localStorage.setItem('token', res.data.token)
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
                 // 登录成功后，跳转到上一个页面
                 router.back()
             } else if (res.code == 400) {

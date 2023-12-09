@@ -4,8 +4,10 @@ import (
 	"errors"
 	// "fmt"
 	// "encoding/json"
+	"math/rand"
 	"regexp"
 	"strconv"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -40,6 +42,16 @@ func validateEmail(email string) bool {
 }
 
 // user register
+func randomPick(arr []string) string {
+	// 设置随机种子
+	rand.Seed(time.Now().UnixNano())
+
+	// 生成随机索引
+	index := rand.Intn(len(arr))
+
+	// 返回随机选取的元素
+	return arr[index]
+}
 func Register(newUser model.User) error {
 	// 数据验证
 	if len(newUser.Username) == 0 || len(newUser.Password) < 6 || len(newUser.Email) == 0 {
@@ -69,7 +81,18 @@ func Register(newUser model.User) error {
 
 	// 初始化summary和avatar_image
 	newUser.Summary = "This is a new use"
-	newUser.Avatar_image = "https://s2.loli.net/2023/12/07/ObzivQC2fqpTZlx.jpg"
+	// newUser.Avatar_image = "https://s2.loli.net/2023/12/07/ObzivQC2fqpTZlx.jpg"
+	AvatarList := []string{
+		"https://s2.loli.net/2023/12/07/ObzivQC2fqpTZlx.jpg",
+		"https://s2.loli.net/2023/12/05/hRQyPjI723LbV9l.png",
+		"https://s2.loli.net/2023/12/09/Bg7Wbvs96INl8Sr.jpg",
+		"https://s2.loli.net/2023/12/09/9ZPCdiWGLyImfph.png",
+		"https://s2.loli.net/2023/12/09/LHT3gx958KJhMBD.jpg",
+		"https://s2.loli.net/2023/12/09/RwhL42gUmV1vaEH.jpg",
+		"https://s2.loli.net/2023/12/09/8gZxsycdmFjpDC2.jpg",
+		"https://s2.loli.net/2023/12/09/3DdwZM5XlrCF16u.jpg",
+	}
+	newUser.Avatar_image = randomPick(AvatarList)
 
 	return dao.Register(newUser)
 }
@@ -100,4 +123,17 @@ func Login(user model.User) (*model.User, string, error) {
 	token := strconv.FormatUint(uint64(thisUser.ID), 10)
 
 	return thisUser, token, nil
+}
+
+// user list	返回用户信息列表
+func GetUserList() ([]model.User, error) {
+	var res []model.User
+	res, err := dao.GetUserList()
+	if err != nil {
+		return nil, err
+	}
+	// 密码解密后返回
+	
+	return res, nil
+	// return dao.GetUserList()
 }

@@ -14,12 +14,15 @@ func GetUserByUsername(c *gin.Context) {
 	user, err := service.GetUserByUsername(username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"code": "400",
+			"code":  "400",
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"code": "200",
+		"data": user,
+	})
 }
 
 // @Title			user register
@@ -44,7 +47,7 @@ func Register(c *gin.Context) {
 	err := service.Register(newUser)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": "400",
+			"code":  "400",
 			"error": err.Error(),
 		})
 		return
@@ -74,14 +77,14 @@ func Login(c *gin.Context) {
 	userInfo, token, err := service.Login(user)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code": "400",
+			"code":  "400",
 			"error": err.Error(),
 		})
 		return
 	}
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"code": "500",
+			"code":  "500",
 			"error": "token is empty",
 		})
 		return
@@ -99,5 +102,27 @@ func Login(c *gin.Context) {
 			},
 		},
 		"msg": "登录成功",
+	})
+}
+
+// @Title			user list
+// @Description		获取用户列表信息
+// @Success			200			object		controllers.Response	"code,data,msg"
+// @Failure			401			object		controllers.Response	"各种错误"
+// @Failure 		500 object controllers.Response "服务器内部错误"
+// @Tags			user
+// @Router			/user/list [get]
+func GetUserList(c *gin.Context) {
+	userList, err := service.GetUserList()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":  "400",
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": "200",
+		"data": userList,
 	})
 }
