@@ -4,8 +4,8 @@ import (
 	"fmt"
 	// "github.com/gin-gonic/gin"
 	// "net/http"
-    "github.com/myApp/db"
-    "github.com/myApp/router"
+    "github.com/myapp/db"
+    "github.com/myapp/router"
 )
 
 func main() {

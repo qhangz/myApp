@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	// "log"
 	// "fmt"
 	// "encoding/json"
 	"math/rand"
@@ -11,8 +12,8 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/myApp/dao"
-	"github.com/myApp/model"
+	"github.com/myapp/dao"
+	"github.com/myapp/model"
 )
 
 func GetUserByUsername(username string) (*model.User, error) {
@@ -20,8 +21,8 @@ func GetUserByUsername(username string) (*model.User, error) {
 }
 
 var ErrorRegisterInfo = errors.New("invalid registration information")
-var ErrorRegisterUserExist = errors.New("user already exists")
-var ErrorRegisterEmailExist = errors.New("email already exists")
+var ErrorUserExist = errors.New("user already exists")
+var ErrorEmailExist = errors.New("email already exists")
 var ErrorRegisterFailed = errors.New("registration failed")
 var ErrorRegisterSuccess = errors.New("registration success")
 var ErrorPasswordWrong = errors.New("password is wrong")
@@ -32,6 +33,10 @@ var ErrorLoginInfo = errors.New("invalid login information")
 var ErrorLoginFailed = errors.New("login failed")
 var ErrorLoginSuccess = errors.New("login success")
 var ErrorUserNotExit = errors.New("user not exit")
+
+var ErrorMsg = errors.New("error message")
+var ErrorAgeWrong = errors.New("age is wrong")
+var ErrorSummaryWrong = errors.New("summary is wrong")
 
 // is email valid
 func validateEmail(email string) bool {
@@ -64,12 +69,12 @@ func Register(newUser model.User) error {
 
 	// 检查邮箱是否已经存在
 	if dao.IsEmailExist(newUser.Email) {
-		return ErrorRegisterEmailExist
+		return ErrorEmailExist
 	}
 
 	// 检查用户名是否已经存在
 	if dao.IsUsernameExist(newUser.Username) {
-		return ErrorRegisterUserExist
+		return ErrorUserExist
 	}
 
 	// 用户密码加密
@@ -97,7 +102,7 @@ func Register(newUser model.User) error {
 	return dao.Register(newUser)
 }
 
-// user login
+// user login (return userInfo,token,error)
 func Login(user model.User) (*model.User, string, error) {
 	// 数据验证(username和password)
 	if len(user.Username) == 0 || len(user.Password) < 6 {
@@ -132,8 +137,120 @@ func GetUserList() ([]model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	// 密码解密后返回
-	
+
 	return res, nil
 	// return dao.GetUserList()
+}
+
+// update username
+func UpdateUsername(user model.User, newUsername string) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorUserNotExit
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	// 检查新用户名是否已经存在
+	if dao.IsUsernameExist(newUsername) {
+		return ErrorUserExist
+	}
+	return dao.UpdateUsername(thisUser, newUsername)
+}
+
+// update password
+func UpdatePassword(user model.User, newPassword string) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorMsg
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	// 验证密码是否正确
+	err = bcrypt.CompareHashAndPassword([]byte(thisUser.Password), []byte(user.Password))
+	if err != nil {
+		return ErrorMsg
+	}
+	// 验证新密码长度
+	if len(newPassword) < 6 {
+		return ErrorRegisterInfo
+	}
+	// 密码加密
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return ErrorHashPassword
+	}
+	return dao.UpdatePassword(thisUser, string(hashPassword))
+}
+
+// update email
+func UpdateEmail(user model.User, newEmail string) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorMsg
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	// 验证邮箱格式
+	if !validateEmail(newEmail) {
+		return ErrorEmailWrong
+	}
+	// 检查邮箱是否已经存在
+	if dao.IsEmailExist(newEmail) {
+		return ErrorEmailExist
+	}
+	return dao.UpdateEmail(thisUser, newEmail)
+}
+
+// update age
+func UpdateAge(user model.User, newAge int) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorMsg
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	// 验证年龄是否合法
+	if newAge < 0 || newAge > 150 {
+		return ErrorAgeWrong
+	}
+
+	return dao.UpdateAge(thisUser, newAge)
+}
+
+// update summary
+func UpdateSummary(user model.User, newSummary string) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorMsg
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	// 验证简介是否合法
+	if len(newSummary) <= 0 || len(newSummary) > 100 {
+		return ErrorSummaryWrong
+	}
+	return dao.UpdateSummary(thisUser, newSummary)
+}
+
+// delete user
+func DeleteUser(user model.User) error {
+	// 检查用户名存在
+	thisUser, err := dao.GetUserByUsername(user.Username)
+	if err != nil {
+		return ErrorMsg
+	}
+	if thisUser == nil {
+		return ErrorUserNotExit
+	}
+	return dao.DeleteUser(thisUser)
 }

@@ -4,8 +4,8 @@ import (
 	// "os/user"
 
 	"github.com/gin-gonic/gin"
-	"github.com/myApp/controller"
-	"github.com/myApp/middlewares"
+	"github.com/myapp/controller"
+	"github.com/myapp/middlewares"
 )
 
 func InitRouter() *gin.Engine {
@@ -22,7 +22,23 @@ func InitRouter() *gin.Engine {
 		user.POST("/login", controller.Login)
 		user.GET("/list", controller.GetUserList)
 		user.GET("/info/:username", controller.GetUserByUsername)
-		
+		user.POST("/update/username", controller.UpdateUsername)
+		user.POST("/update/password", controller.UpdatePassword)
+		user.POST("/update/email", controller.UpdateEmail)
+		user.POST("/update/age", controller.UpdateAge)
+		user.POST("/update/summary", controller.UpdateSummary)
+		user.POST("/delete", controller.DeleteUser)
+	}
+
+	discuss := router.Group("/api/discuss")
+	{
+		discuss.POST("/publish", controller.PublishDiscuss)
+		discuss.GET("/discussinfo", controller.GetDiscussInfo)
+	}
+
+	comment := router.Group("/api/comment")
+	{
+		comment.POST("/publish", controller.PublishComment)
 	}
 
 	return router

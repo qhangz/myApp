@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router
 import Layout from '@/views/Layout/index.vue'
 import { useUserStore } from '@/stores/userStore'
 import { createPinia } from 'pinia';
+import { ElMessage } from 'element-plus'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

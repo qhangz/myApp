@@ -1,20 +1,6 @@
 <script setup lang="ts">
 import { getUserList } from '@/api/user';
 import { onMounted, ref } from 'vue';
-// interface User {
-//                   avatar_image: string;
-//                   // Add other properties here if needed
-//                 }
-
-//                 let userList = ref<User[]>([])
-//                 const getUserInfo = async () => {
-//                     const res = await getUserList()
-//                     userList.value = res.data
-//                     console.log(userList.value);
-//                 }
-//                 onMounted(() => {
-//                     getUserInfo()
-//                 })
 
 interface User {
     ID: Int16Array;
@@ -38,15 +24,6 @@ onMounted(() => {
     getUserInfo()
 })
 
-// let userList = ref([])
-// const getUserInfo = async () => {
-//     const res = await getUserList()
-//     userList.value = res.data
-//     console.log(userList.value);
-// }
-// onMounted(() => {
-//     getUserInfo()
-// })
 </script>
 
 <template>

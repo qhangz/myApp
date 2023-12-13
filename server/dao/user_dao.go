@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"github.com/myApp/db"
-	"github.com/myApp/model"
+	"github.com/myapp/db"
+	"github.com/myapp/model"
 )
 
 // get user by username
@@ -59,4 +59,39 @@ func GetUserList() ([]model.User, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+// update username
+func UpdateUsername(user *model.User, newUsername string) error {
+	return db.DB.Model(&user).Update("username", newUsername).Error
+}
+
+// func UpdateUsername(user model.User, newUsername string) error {
+// 	// 将user中username字段更新为newUsername
+// 	return db.DB.Model(&user).Where("username = ?", user.Username).Update("username", newUsername).Error
+// }
+
+// update password
+func UpdatePassword(user *model.User, newPassword string) error {
+	return db.DB.Model(&user).Update("password", newPassword).Error
+}
+
+// update email
+func UpdateEmail(user *model.User, newEmail string) error {
+	return db.DB.Model(&user).Update("email", newEmail).Error
+}
+
+// update age
+func UpdateAge(user *model.User, newAge int) error {
+	return db.DB.Model(&user).Update("age", newAge).Error
+}
+
+// update summary
+func UpdateSummary(user *model.User, newSummary string) error {
+	return db.DB.Model(&user).Update("summary", newSummary).Error
+}
+
+// delete user
+func DeleteUser(user *model.User) error {
+	return db.DB.Delete(&user).Error
 }
