@@ -30,4 +30,3 @@ func GetDiscussInfo(discussID uint) (*model.Discuss, error) {
 
 	return &discuss, nil
 }
-

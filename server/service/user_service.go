@@ -112,7 +112,7 @@ func Login(user model.User) (*model.User, string, error) {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return nil, "", ErrorLoginFailed
+		return nil, "", ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return nil, "", ErrorUserNotExit
@@ -164,7 +164,7 @@ func UpdatePassword(user model.User, newPassword string) error {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return ErrorMsg
+		return ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return ErrorUserNotExit
@@ -191,7 +191,7 @@ func UpdateEmail(user model.User, newEmail string) error {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return ErrorMsg
+		return ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return ErrorUserNotExit
@@ -212,7 +212,7 @@ func UpdateAge(user model.User, newAge int) error {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return ErrorMsg
+		return ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return ErrorUserNotExit
@@ -230,7 +230,7 @@ func UpdateSummary(user model.User, newSummary string) error {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return ErrorMsg
+		return ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return ErrorUserNotExit
@@ -247,7 +247,7 @@ func DeleteUser(user model.User) error {
 	// 检查用户名存在
 	thisUser, err := dao.GetUserByUsername(user.Username)
 	if err != nil {
-		return ErrorMsg
+		return ErrorUserNotExit
 	}
 	if thisUser == nil {
 		return ErrorUserNotExit

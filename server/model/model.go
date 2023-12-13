@@ -40,27 +40,3 @@ type Comment struct {
 	View_Number int64  `gorm:"type:int" json:"view_num"`
 }
 
-// credit card model
-// type CreditCard struct {
-// 	gorm.Model
-// 	Number string `gorm:"type:varchar(255);not null" json:"Number"`
-// 	UserID uint   // 外键，用户id
-// }
-
-// type User struct {
-// 	gorm.Model
-// 	Username     string    `gorm:"type:varchar(20);not null" json:"username"`
-// 	Password     string    `gorm:"size:255;not null" json:"password"`
-// 	Email        string    `gorm:"type:varchar(20);not null;unique" json:"email"`
-// 	Age          int       `gorm:"type:int;not null" json:"age"`
-// 	Summary      string    `gorm:"type:varchar(255);not null" json:"summary"`
-// 	Avatar_image string    `gorm:"type:varchar(255);not null" json:"avatar_image"`
-// 	Discuss      []Discuss `gorm:"foreignkey:Username;association_foreignkey:Username"`
-// }
-
-// type Discuss struct {
-// 	gorm.Model
-// 	UserID   uint   `gorm:"type:int;not null" json:"user_id"`
-// 	Username string `gorm:"type:varchar(20);not null" json:"username"`
-// 	Content  string `gorm:"type:varchar(255);not null" json:"content"`
-// }

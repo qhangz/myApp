@@ -63,11 +63,15 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .user {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    // min-height: calc(100vh - 188px);
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1180px;
 
     .this-user {
         height: 230px;

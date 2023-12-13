@@ -4,6 +4,6 @@ database:
   Port: 3306
   Username: root
   Password: password
-  DBName: mytest
+  DBName: myapp
   Charset: utf8
 

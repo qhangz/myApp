@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import BackTop from '@/components/BackTop.vue'
 import UserList from './components/UserList.vue'
+import UserUpdate from './components/UserUpdate.vue'
+import UserDelete from './components/UserDelete.vue'
 </script>
 
 <template>
     <div class="home">
         <UserList />
+        <UserUpdate />
+        <UserDelete />
         <BackTop />
     </div>
 </template>
