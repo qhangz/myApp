@@ -1,6 +1,6 @@
-# CodeX
+# MyApp
 ## 目录结构
-codex
+myApp
 ```text
 ├── config
 │   ├── config.go
